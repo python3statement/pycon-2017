@@ -4,9 +4,11 @@
 :Title: A journey to sunset Python 2 support and Fix Python Packaging
 :Duration: 30/45 minutes
 :Level: Intermediate
-:Categories: 
+:Categories: General, Python 2, Python 3, Packaging, Best Practices.
 
 :Auhors: Matthias Bussonnier, Michael Pacer, Thomas Kluyver, MinRK
+
+
 
 
 
@@ -53,7 +55,53 @@ chasm between Python 2 and Python 3 users comforting the former one that Python
 3 was a "bad idea" and isolating the later one in the illusion of "it works on
 my machine".
 
-1. The gotchas and old solutions
+Audience
+========
+
+Any library Authors, But in particular library authors interested in releasing
+a version of their library to be Python 3 only without breaking Python 2 users
+system.
+
+Users and developers of Python 2 libraries, who want to make sure their system
+don't upgrade to incompatible package version.
+
+User and developers of Python 3 libraries that do care about Python 2 users and
+developers.
+
+
+Objective
+=========
+
+ - Make user and developers aware of Python 3 statement as a resource to inform
+   users and developers that some packages are migrating to Python 3 only and
+   how to do it without breaking user system.
+
+ - Make user aware that they should be using pip 9+ and setuptools 24.3+ not to
+   break their Python 2 installation. 
+
+ - Make developer aware of the recent changes in Python Packaging
+   (`python_requres` metadata) and how to make use of it. 
+
+ - The traps not to fell into if you plan to release a Python 3 only package
+   version.
+
+
+Detailed Abstract
+=================
+
+1. The Python 3 statement
+-------------------------
+
+A growing number of libraries and library authors have said that they are
+planning on stopping support for Python 2, no later than 2020, if not already.
+It is also known that a number of users will not migrate their Python 3 by that
+day.
+
+Currently releasing a new version of a Python-2 and Python-3 compatible library
+will break on Python-2 systems, 
+
+
+2. The gotchas and old solutions
 --------------------------------
 
 We'll dive into various solutions that could be or have to be used (as of mid
@@ -68,14 +116,14 @@ little-know-and-not-really-a-a-feature of oldest pip versions.
 
 Regardless of the failures it is _critical_ to provide users with the right
 error messages _and solution_ if ever they were encountered. Providing _early_
-warnings to regular library users tha things are about to change is helpful to
+warnings to regular library users that things are about to change is helpful to
 reduce the dissatisfaction from users and flow of bug report to your dev team
 post-transition.
 
 While it seam that Python have a way to mark a package as Python 3 only, we'll
 see that it is/was not always possible to do so. 
 
-2. Updating the Python Packaging stack
+3. Updating the Python Packaging stack
 --------------------------------------
 
 While Pep 5xx describe a mechanism by which a package can be tagged as Python 3
@@ -119,6 +167,14 @@ wheel-only. It is now
 
 
 
+Outline
+=======
+
+  1. Intro (5min):
+    - Who am I/Who are we
+    - History of Python releases/ End of life. 
+    - The Python 3 statement.
+
 
 
 Ideas,
@@ -126,4 +182,15 @@ Ideas,
 why you would like (or not) make the transition
 Warning pep 440 !
 Does not apply to Python 3 only _new_ libraries.
+
+Who are the affected people:
+
+ - Everyone ! As long as you use more than 2 minor versions of Python in you
+   life. We _believe_ the most common use case is user of Python 2 that will
+   `pip install (--upgrade?)` a library which goes from "single-source" to only
+   Py3.
+
+   
+
+ - 
 
