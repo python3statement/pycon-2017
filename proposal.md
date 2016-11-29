@@ -6,7 +6,7 @@
 :Level: Intermediate
 :Categories: General, Python 2, Python 3, Packaging, Best Practices.
 
-:Auhors: Matthias Bussonnier, Michael Pacer, Thomas Kluyver, MinRK
+:Authors: Matthias Bussonnier, Michael Pacer, Thomas Kluyver, MinRK
 
 
 
@@ -19,70 +19,70 @@ Summary
 > "Four shalt thou not count, neither shalt thou count two, excepting that thou
 then proceedeth to three."
 
-Python 3 has been around for now more than eight years, and most of the Python
+Python 3 has been around for now more than eight years, and much of the Python
 ecosystem is now available both on Python 2 and Python 3, often using a single
-code base. It comes a time in the lifespan of such libraries when the authors
+code base. There comes a time in the life of such libraries when the authors
 start to consider stopping support for Python 2 in a new major version.
 
-While the above statement seem to be relatively simple it was (or is depending
+While the above statement seem to be relatively simple, it was (or is, depending
 on the merge-state of various patches) relatively difficult to achieve without
-wreaking havoc for Python 2 user. 
+wreaking havoc for Python 2 users.
 
-As any maintainer of relatively widely used library, we deeply care about "not
-breaking user space", and adventured in the rabbit-hole of Packaging (and of
-Caerbannog). 
+Like any maintainer of a widely used library, we care deeply about "not
+breaking user space", and thus we ventured into the rabbit-hole of Packaging
+(and of Caerbannog). 
 
-We'll narrate our tale through the amending on peps, our journeys with the
-knights of setuptools, contribution to the Castle of pypa/Warehouse, fights
-the dragons of Pip, and errance in the unittest-less land of PyPI legacy. 
+We'll narrate our tale through the amending of PEPs, our journeys with the
+knights of setuptools, contribution to the Castle of pypa/Warehouse, fights with
+the dragons of Pip, and errands in the unittest-less land of PyPI legacy. 
 
-At the end off the above tale, the careful beholders will be aware of the
-hazards of migrating their libraries to Python 3 only, aware of the pitfalls 
+By the end of the above tale, the careful beholder will be aware of the
+hazards of migrating their libraries to require Python 3, and of strategies for
+overcoming these issues.
 
 
 Description
 ===========
 
-This talk will have 3 main category, 
+This talk will have 3 main categories:
 
-In the first part we will focus on the hiccups that can arise if one want to
+In the first part we will focus on the hiccups that can arise if one wants to
 release a new major version of a program/library which focus on being
 compatible with Python 3 only, or at least lay the ground work to prepare this
-transition. There are many way that the transition can be done, with most of
-them having their advantages and drawbacks. In particular most of the solution
-often advocated on the internet can break on Python 2 systems increasing the
-chasm between Python 2 and Python 3 users comforting the former one that Python
-3 was a "bad idea" and isolating the later one in the illusion of "it works on
-my machine".
+transition. There are many ways that the transition can be done, with advantages
+and drawbacks to each. In particular, most of the solution
+often advocated on the internet can break on Python 2 systems, increasing the
+chasm between Python 2 and Python 3.
 
 Audience
 ========
 
-Any library Authors, But in particular library authors interested in releasing
-a version of their library to be Python 3 only without breaking Python 2 users
-system.
+Any library authors, but in particular library authors interested in releasing
+a version of their library to require Python 3 without breaking Python 2 users'
+systems.
 
 Users and developers of Python 2 libraries, who want to make sure their system
 don't upgrade to incompatible package version.
 
-User and developers of Python 3 libraries that do care about Python 2 users and
+User and developers of Python 3 libraries who care about Python 2 users and
 developers.
 
 
 Objective
 =========
 
- - Make user and developers aware of Python 3 statement as a resource to inform
-   users and developers that some packages are migrating to Python 3 only and
-   how to do it without breaking user system.
+ - Make users and developers aware of the [Python 3 statement](http://www.python3statement.org/)
+   as a resource to inform
+   users and developers that some packages are migrating to require Python 3, and
+   how to do it without breaking users' systems.
 
- - Make user aware that they should be using pip 9+ and setuptools 24.3+ not to
-   break their Python 2 installation. 
+ - Make users aware that they should be using pip 9+ and setuptools 24.3+ to avoid
+   problems in their Python 2 installation.
 
- - Make developer aware of the recent changes in Python Packaging
+ - Make developers aware of the recent changes in Python Packaging
    (`python_requres` metadata) and how to make use of it. 
 
- - The traps not to fell into if you plan to release a Python 3 only package
+ - The traps not to fall into if you plan to release a Python 3 only package
    version.
 
 
@@ -193,4 +193,3 @@ Who are the affected people:
    
 
  - 
-
