@@ -69,12 +69,12 @@ chasm between Python 2 and Python 3.
 Audience
 ========
 
-Any library authors, but in particular library authors interested in releasing
-a version of their library to require Python 3 without breaking Python 2 users'
+Library authors, in particular library authors interested in releasing a
+version of their library that requires Python 3 without breaking Python 2 users'
 systems.
 
-Users and developers of Python 2 libraries, who want to make sure their system
-don't upgrade to incompatible package version.
+Users and developers of Python 2 libraries, who want to make sure their systems
+don't upgrade to incompatible versions of once-compatible packages.
 
 User and developers of Python 3 libraries who care about Python 2 users and
 developers.
@@ -209,6 +209,7 @@ Outline
         - Some library will migrate to Python 3 only by 2020.
         - We don't want it to be a hassle for Python 2 users.
         - We might want to have a Python 2 LTS.
+    - We <3 users of Python <3
 
   2. The Problems, and solutions (12 min)
 
