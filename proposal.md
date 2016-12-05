@@ -40,9 +40,12 @@ issue.
 In order to solve this problem, and thereby make both users' and maintainers'
 lives easier, we ventured into the rabbit-hole called Packaging.
 
-We'll narrate our tale through the amending of PEPs, our journeys with the
-knights of setuptools, contribution to the ramparts of the pypa/Warehouse Castle, fights with
-the dragons of Pip, and errands in the "land of no unit tests" known as PyPI legacy.
+Though we set off with a singular quest, our tale roves through many lands.
+We'll narrate the story of our amending PEPs through discussions with the
+autonomous collective, our journeys alongside the knights of setuptools,
+our efforts in building the ramparts of the pypa/Warehouse Castle, battles with the
+dragons of Pip, and errands in the "land of no unit tests" otherwise known as PyPI
+legacy.
 
 By the end of the above tale, the careful beholder will be aware of the
 hazards of migrating their libraries to require Python 3, and of strategies for
