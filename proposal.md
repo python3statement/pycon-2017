@@ -1,7 +1,8 @@
 # PyCon Proposal
 
 
-:Title: Lobbing the Holy Hand Grenade: Fixing Python packaging to handle the sunset for Python 2 support 
+:Title: Lobbing the Holy Hand Grenade: Fixing Python packaging to nullify the 
+dangerous rabbit-den that lurks within the sunset of Python 2 support 
 :Duration: 30/45 minutes
 :Level: Intermediate
 :Categories: General, Python 2, Python 3, Packaging, Best Practices.
