@@ -58,13 +58,15 @@ Description
 
 This talk will have 3 main parts:
 
-In the first part, we will focus on the challenges that arise when releasing a
-major version of a library that is Python 3 only. We will describe some
-groundwork that will ease such a transition. Additionally, we will describe
-several ways to approach the transition itself, complete with a discussion of
-the merits and demerits of each approach. In particular, many solutions unknowingly 
-unleash the rabbit of breakage on Python 2 systems, further increasing the
-chasm between Python 2 and Python 3.
+In the first part, we will describe our quest, focusing on movements toward Python 3 and the concerns that arise for library developers who wish to end support for Python 2. 
+
+In the second part, we will describe several ways to approach the transition
+itself, complete with a discussion of the merits and demerits of each approach.
+In particular, we will focus on our new solution that avoids many of the
+pitfalls of earlier solutions. 
+
+In the third part, we describe the work needed in order to make to implement
+the newest solution and how it avoids unleashing rabbits on unsuspecting Python 2 users.
 
 Audience
 ========
