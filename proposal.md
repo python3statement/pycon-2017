@@ -56,14 +56,14 @@ overcoming these issues.
 Description
 ===========
 
-This talk will have 3 main categories:
+This talk will have 3 main parts:
 
-In the first part we will focus on the hiccups that can arise if one wants to
-release a new major version of a program/library which focus on being
-compatible with Python 3 only, or at least lay the ground work to prepare this
-transition. There are many ways that the transition can be done, with advantages
-and drawbacks to each. In particular, most of the solution
-often advocated on the internet can break on Python 2 systems, increasing the
+In the first part, we will focus on the challenges that arise when releasing a
+major version of a library that is Python 3 only. We will describe some
+groundwork that will ease such a transition. Additionally, we will describe
+several ways to approach the transition itself, complete with a discussion of
+the merits and demerits of each approach. In particular, many solutions unknowingly 
+unleash the rabbit of breakage on Python 2 systems, further increasing the
 chasm between Python 2 and Python 3.
 
 Audience
