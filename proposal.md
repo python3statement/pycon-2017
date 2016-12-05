@@ -1,7 +1,7 @@
 # PyCon Proposal
 
 
-:Title: A journey to sunset Python 2 support and Fix Python Packaging
+:Title: Lobbing the Holy Hand Grenade: Fixing Python packaging to handle the sunset for Python 2 support 
 :Duration: 30/45 minutes
 :Level: Intermediate
 :Categories: General, Python 2, Python 3, Packaging, Best Practices.
@@ -16,26 +16,33 @@ Summary
 > "Four shalt thou not count, neither shalt thou count two, excepting that thou
 then proceedeth to three."
 
-Python 3 has been around for now more than eight years, and much of the Python
+Python 3 has been around for more than eight years, and much of the Python
 ecosystem is now available both on Python 2 and Python 3, often using a single
 code base. There comes a time in the life of such libraries when the authors
-start to consider stopping support for Python 2 in a new major version.
+consider stopping support for Python 2 in a new major version.
 
-While the above statement seem to be relatively simple, it was (or is,
-depending on the merge-state of various patches) difficult to achieve without
-wreaking havoc for Python 2 users, as up until recently is was not possible to
-tag a release as Python 3 only.
+While it may seem simple to cease support for Python 2 – if you did not want
+wreak havoc for users who wish to stay on Python 2 – you just made your life
+much more difficult. Put simply, up until recently it was not possible to tag
+a release as Python 3 only, today it is possible. 
 
-Like any maintainer of a widely used library, we care deeply about ensuring
-that users still on Python 2 can easily install older versions, or a parallel
-"Long Term Support" variant, which still works for them. Doing so without
-having users to explicitly pin dependencies in all their projects was not easy
-easy task. Thus we ventured into the rabbit-hole of Packaging to make both
-users and maintainers life easier.
+Like any maintainer of a widely used library, we want to ensure that users
+still using Python 2 can still have a functioning library, even after
+development proceeds in a way that does not support Python 2. One way to ensure
+that is to allow easy installation older versions; another way is to have a
+parallel "Long Term Support" variant that a different community of developers
+supports going forward. At the same time, it is not reasonable to expect users
+to explicitly pin maximal version dependencies in all of their projects and
+track those that they depend on (including those that they were not actively
+developing), when all they wish is to avoid having a Python 2 incompatibility
+issue.
+
+In order to solve this problem, and thereby make both users' and maintainers'
+lives easier, we ventured into the rabbit-hole called Packaging.
 
 We'll narrate our tale through the amending of PEPs, our journeys with the
-knights of setuptools, contribution to the Castle of pypa/Warehouse, fights with
-the dragons of Pip, and errands in the unittest-less land of PyPI legacy.
+knights of setuptools, contribution to the ramparts of the pypa/Warehouse Castle, fights with
+the dragons of Pip, and errands in the "land of no unit tests" known as PyPI legacy.
 
 By the end of the above tale, the careful beholder will be aware of the
 hazards of migrating their libraries to require Python 3, and of strategies for
