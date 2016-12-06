@@ -145,7 +145,7 @@ Several workarounds are possible. This includes (META: we should give examples f
 It's easier now!
     - Use setuptools > 24.3, this allows you to set the `python_requires` metadata.
     - Add a `python_requires` to your `setup.py`
-    - Use (and have your users use) pip 9.0+, because it understand `python_requires`
+    - Use (and have your users use) pip 9.0+, because it understands `python_requires`
 
 There will always be cases where one of the above requirements will not be true
 on some users' machines, particularly if they do not upgrade their pip.  But,
@@ -169,51 +169,57 @@ package to be installed, 2 critical pieces of software need to understand this m
 
 A) The package manger
 
-For a package to install only on compatible python versions, the package needs
-to access the compatibility information. Excepting some previously mentioned
-"pseudo-features", pip <9.0 cannot understand the `requires_python` metadata.
-It is _prefereable_ for the Package manager to get this information _before_
-downloading or (trying to) install packages. It is useful to understand how
-pip gets this information from the package repository and how pip makes its
-decision. It is particularly useful for any team with internal deployments, in
-order to be able to understand the origin of the errors not-up-to-date users
+For a package to install only on compatible python versions, the package
+manager needs to access the compatibility information. Excepting some
+previously mentioned "pseudo-features", pip <9.0 cannot understand the
+`requires_python` metadata. It is _preferable_ for the Package manager to get
+this information _before_ downloading or (trying to) install packages. It is
+useful to understand how pip gets this information from the package repository
+and how pip makes its decision. Any team with internal deployments will need
+this understanding to diagnose the origin of the errors not-up-to-date users
 will encounter.
 
 Pip does parse what is called a `simple repository` format, lo list the
 available files  for a given package. Information about the package are
 extracted from its _name_, and since pip 9.0 from the `data-`attributes
-provided in the HTML. This now allow pip to not even consider downloading a
-file and trying to install it is the current Python version is not compatible.
+provided in the HTML. This now allows pip to not bother with downloading a
+file (let alone trying to install) when the current Python version is not compatible.
 
 
 B) The Package index.
 
-While the package index (aka PyPI), does store some of this informations, is
-quite not what is needed. Plus there was no way to query this information, nor
-to expose it for consumption for pip.
+While the package index (aka PyPI), stores some of this information, it lacked
+what was needed. If it had been stored, there still was no way to query this
+information, nor to expose it to pip.
 
+(META: what is this paragraph accomplishing beyond the rest of the content?)
 The current Package distribution infrastructure is a (complex) beast, it is
 interesting to dive into it, see the current status, and what changes can come
-in a near, or further future.
+in a near, or further future. Additionally, by seeing what changes cannot be
+made given the current environment, we can learn about the inner workings of
+some of the most important parts of the python ecosystem. 
 
-PyPI legacy and warehouse are both sharing a database. Any changes is tricky as
-PyPI legacy has close to no tests at all. Fetching the `require_python` set on
-the `release` table of PyPI (using a Join) was a bottle neck, so we had to
-change the table, though PyPI-legacy was doing unexpected operations on the
-database... Let's have a look on how the package information is stored and see
-what we did.
+We'll have a look on how the package information is stored and see what we did.
+PyPI legacy and warehouse share a database. Any change is tricky as PyPI legacy
+has close to no tests at all, despite its crucial place in the Python
+ecosystem. In order to make the solution available in a future facing manner,
+we modified the common database to make it source the correct information.  At
+first, we attempted to directly set the `require_python` info on the `release`
+table of PyPI by using a `JOIN` operation, which unfortunately turned out to be
+a processing bottle neck. Instead, we had to altered the tables directly (using
+TRIGGERS).  This would have been sufficient, but PyPI-legacy was operating in
+unexpected ways on the database… 
 
 Despite many legends about the current state of python packaging, contributing
-to such infrastructure is less scary than usually depicted, and should be more
-friendly with recent changes.
-
+to this infrastructure is less scary than usually depicted. Recent improvements
+documentation continues to improve contributor friendliness.
 
 Outline
 =======
 
   1. Intro (4min):
 
-    - Who am I/Who are we
+    - Who am I(the presenter) and Who are we(the authors)
     - History of Python releases/ End of life.
     - The Python 3 statement.
         - Some library will migrate to Python 3 only by 2020.
@@ -252,7 +258,7 @@ Outline
 
   4. TL;DL (too long didn't listen), AKA conclusion.
 
-    - use PIP 9
+    - use pip 9+
     - upgrade setuptools
     - Question and Contribution to gotchas, read and contribute to
       python3statement practicalities section.
