@@ -1,7 +1,8 @@
 # PyCon Proposal
 
 
-:Title: A journey to sunset Python 2 support and Fix Python Packaging
+:Title: Lobbing the Holy Hand Grenade: Fixing Python packaging to nullify the 
+dangerous rabbit-den that lurks within the sunset of Python 2 support 
 :Duration: 30/45 minutes
 :Level: Intermediate
 :Categories: General, Python 2, Python 3, Packaging, Best Practices.
@@ -14,28 +15,38 @@ Summary
 
 
 > "Four shalt thou not count, neither shalt thou count two, excepting that thou
-then proceedeth to three."
+then proceed to three."
 
-Python 3 has been around for now more than eight years, and much of the Python
+Python 3 has been around for more than eight years, and much of the Python
 ecosystem is now available both on Python 2 and Python 3, often using a single
 code base. There comes a time in the life of such libraries when the authors
-start to consider stopping support for Python 2 in a new major version.
+consider stopping support for Python 2 in a new major version.
 
-While the above statement seem to be relatively simple, it was (or is,
-depending on the merge-state of various patches) difficult to achieve without
-wreaking havoc for Python 2 users, as up until recently is was not possible to
-tag a release as Python 3 only.
+While it may seem simple to cease support for Python 2 – if you did not want
+wreak havoc for users who wish to stay on Python 2 – you just made your life
+much more difficult. Put simply, up until recently it was not possible to tag
+a release as Python 3 only, today it is possible. 
 
-Like any maintainer of a widely used library, we care deeply about ensuring
-that users still on Python 2 can easily install older versions, or a parallel
-"Long Term Support" variant, which still works for them. Doing so without
-having users to explicitly pin dependencies in all their projects was not easy
-easy task. Thus we ventured into the rabbit-hole of Packaging to make both
-users and maintainers life easier.
+Like any maintainer of a widely used library, we want to ensure that users
+still using Python 2 can still have a functioning library, even after
+development proceeds in a way that does not support Python 2. One way to ensure
+that is to allow easy installation of older versions; another way is to have a
+parallel "Long Term Support" variant that a different community of developers
+supports going forward. At the same time, it is not reasonable to expect users
+to explicitly pin maximal version dependencies in all of their projects and
+track those that they depend on (including those that they were not actively
+developing), when all they wish is to avoid having a Python 2 incompatibility
+issue.
 
-We'll narrate our tale through the amending of PEPs, our journeys with the
-knights of setuptools, contribution to the Castle of pypa/Warehouse, fights with
-the dragons of Pip, and errands in the unittest-less land of PyPI legacy.
+In order to solve this problem, and thereby make both users' and maintainers'
+lives easier, we ventured into the rabbit-hole called Packaging.
+
+Though we set off with a singular quest, our tale roves through many lands.
+We'll narrate the story of our amending PEPs through discussions with the
+autonomous collective, our journeys alongside the knights of setuptools,
+our efforts in building the ramparts of the pypa/Warehouse Castle, battles with the
+dragons of Pip, and errands in the "land of no unit tests" otherwise known as PyPI
+legacy.
 
 By the end of the above tale, the careful beholder will be aware of the
 hazards of migrating their libraries to require Python 3, and of strategies for
@@ -45,29 +56,37 @@ overcoming these issues.
 Description
 ===========
 
-This talk will have 3 main categories:
+This talk will have 3 main parts:
 
-In the first part we will focus on the hiccups that can arise if one wants to
-release a new major version of a program/library which focus on being
-compatible with Python 3 only, or at least lay the ground work to prepare this
-transition. There are many ways that the transition can be done, with advantages
-and drawbacks to each. In particular, most of the solution
-often advocated on the internet can break on Python 2 systems, increasing the
-chasm between Python 2 and Python 3.
+In the first part, we will describe our quest, focusing on movements toward
+Python 3 and the concerns that arise for library developers who wish to end
+support for Python 2. 
+
+In the second part, we will describe several ways to approach the transition
+itself, complete with a discussion of the merits and demerits of each approach.
+In particular, we will end with a focus on our new solution that avoids many of the
+pitfalls of earlier solutions. 
+
+In the third part, we describe the work needed in order to make to implement
+the newest solution and how it avoids unleashing rabbits on unsuspecting Python 2 users.
 
 Audience
 ========
 
-Any library authors, but in particular library authors interested in releasing
-a version of their library to require Python 3 without breaking Python 2 users'
+Library authors, in particular library authors interested in releasing a
+version of their library that requires Python 3 without breaking Python 2 users'
 systems.
 
-Users and developers of Python 2 libraries, who want to make sure their system
-don't upgrade to incompatible package version.
+Users and developers of Python 2 libraries, who want to make sure their systems
+don't upgrade to incompatible versions of once-compatible packages.
+
+User and developers of Python 2 and 3 libraries who wish to transition to a
+Python 3 only codebase, but who want to ensure a path for Python 2 users to
+continue to use older versions of the software or "Long Term Support" versions
+of the software.  
 
 User and developers of Python 3 libraries who care about Python 2 users and
 developers.
-
 
 Objective
 =========
@@ -77,14 +96,13 @@ Objective
    and developers that some packages are migrating to require Python 3, and how
    to do it without breaking users' systems.
 
- - Make users aware that they should be using pip 9+ and setuptools 24.3+ to avoid
-   problems in their Python 2 installation.
+ - Make users and community leaders aware that they should be using pip 9+ and
+   setuptools 24.3+ to avoid problems in their Python 2 installation.
 
  - Make developers aware of the recent changes in Python Packaging
    (`python_requres` metadata) and how to make use of it.
 
- - The traps not to fall into if you plan to release a Python 3 only package
-   version.
+ - The traps to avoid if you plan to release a Python 3 only version of your package.
 
 
 Detailed Abstract
@@ -113,91 +131,103 @@ disrupt the Python 2 ecosystem"
 --------------------------------
 
 We'll dive into various solutions that could be or have to be used (as of mid
-2016) to release a python 3 only package. While it is possible to tag wheels as
+2016) to release a Python 3 only package. While it is possible to tag wheels as
 being Python 3 only, a Python 2 installation with pip `<9.0` will consider the
-latest `.tar.gz` of a package are the "most recent" and compatible with Python
-2, thus breaking user system after upgrade, – at best – on install, at worst
-during runtime.
+latest `.tar.gz` of a package as the "most recent version". It will treat it as
+compatible with Python 2, thereby breaking users' systems after they upgrade
+(without any warning being given). Worse, if even one  dependency upgrades in this
+manner, that will still be enough to break users' systems. 
 
-Several workaround are possible, from deploying a meta-package with conditional
-requirement, uploading wheel only packages or relaying on
-little-known-and-not-really-a-feature of oldest pip versions.
+Several workarounds are possible. This includes (META: we should give examples for each)
+    - deploying a meta-package with conditional requirements 
+    - uploading wheel only packages 
+    - changing your package name 
+    - using a little-known feature (that is not really a feature) of oldest pip versions.
 
-
-It's easier now !
-    - Use setuptools > 24.3, this allows you to set the `python_requires` medatada.
+It's easier now!
+    - Use setuptools > 24.3, this allows you to set the `python_requires` metadata.
     - Add a `python_requires` to your `setup.py`
-    - Use (and have your users use pip 9.0+ it understand `python_requires`
+    - Use (and have your users use) pip 9.0+, because it understands `python_requires`
 
-Of course there will always be case where one of the above requirement will not
-be true on user machine.
+There will always be cases where one of the above requirements will not be true
+on some users' machines, particularly if they do not upgrade their pip.  But,
+this is why it is even more important to encourage Python 2 users to upgrade
+their pip version to 9.0+. 
 
 Regardless of the failures it is _critical_ to provide users with the right
-error messages _and solution_. Providing _early_
-warnings to regular library users that things are about to change is helpful to
-reduce the dissatisfaction from users and flow of bug report to your dev team
-post-transition.
+error messages and _solutions_ to the problems that arise. Providing _early_
+warnings to regular library users that things are soon to change helps reduce
+user surprise and dissatisfaction, which should also stem the flow of the
+inevitable compatibility related bug reports.
 
 
 3. Under the Hood – Updating the Python Packaging stack
 -------------------------------------------------------
 
-While Pep 5xx describe a mechanism by which a package can be tagged as Python 3
-only this currently does not work for various reasons. Indeed for a Python 3 only
-package to be installed 2 critical pieces of software need to understand this metadata:
+While Pep 5xx describes a mechanism by which a package can be tagged as Python 3
+only, this currently does not work for a variety of reasons. Indeed, for a Python 3 only
+package to be installed, 2 critical pieces of software need to understand this metadata:
 
 
 A) The package manger
 
-For a package to install only on compatible python versions, the package need
-to have access to the compatibility information. Beyond some (previously
-mentioned "features", and alternate package manager (yum, apt, conda), pip <9.0
-does not understand the `requires_python` metadata. It is _prefereable_ for the
-Package manager to get this information _before_ downloading and (trying to)
-install packages. Understanding how pip does get this information from the
-package repository and how pip makes its decision is useful for any team with
-internals deployments, and to be able to understand errors users can encounter.
+For a package to install only on compatible python versions, the package
+manager needs to access the compatibility information. Excepting some
+previously mentioned "pseudo-features", pip <9.0 cannot understand the
+`requires_python` metadata. It is _preferable_ for the Package manager to get
+this information _before_ downloading or (trying to) install packages. It is
+useful to understand how pip gets this information from the package repository
+and how pip makes its decision. Any team with internal deployments will need
+this understanding to diagnose the origin of the errors not-up-to-date users
+will encounter.
 
 Pip does parse what is called a `simple repository` format, lo list the
 available files  for a given package. Information about the package are
 extracted from its _name_, and since pip 9.0 from the `data-`attributes
-provided in the HTML. This now allow pip to not even consider downloading a
-file and trying to install it is the current Python version is not compatible.
+provided in the HTML. This now allows pip to not bother with downloading a
+file (let alone trying to install) when the current Python version is not compatible.
 
 
 B) The Package index.
 
-While the package index (aka PyPI), does store some of this informations, is
-quite not what is needed. Plus there was no way to query this information, nor
-to expose it for consumption for pip.
+While the package index (aka PyPI), stores some of this information, it lacked
+what was needed. If it had been stored, there still was no way to query this
+information, nor to expose it to pip.
 
+(META: what is this paragraph accomplishing beyond the rest of the content?)
 The current Package distribution infrastructure is a (complex) beast, it is
 interesting to dive into it, see the current status, and what changes can come
-in a near, or further future.
+in a near, or further future. Additionally, by seeing what changes cannot be
+made given the current environment, we can learn about the inner workings of
+some of the most important parts of the python ecosystem. 
 
-PyPI legacy and warehouse are both sharing a database. Any changes is tricky as
-PyPI legacy has close to no tests at all. Fetching the `require_python` set on
-the `release` table of PyPI (using a Join) was a bottle neck, so we had to
-change the table, though PyPI-legacy was doing unexpected operations on the
-database... Let's have a look on how the package information is stored and see
-what we did.
+We'll have a look on how the package information is stored and see what we did.
+PyPI legacy and warehouse share a database. Any change is tricky as PyPI legacy
+has close to no tests at all, despite its crucial place in the Python
+ecosystem. In order to make the solution available in a future facing manner,
+we modified the common database to make it source the correct information.  At
+first, we attempted to directly set the `require_python` info on the `release`
+table of PyPI by using a `JOIN` operation, which unfortunately turned out to be
+a processing bottle neck. Instead, we had to altered the tables directly (using
+TRIGGERS).  This would have been sufficient, but PyPI-legacy was operating in
+unexpected ways on the database… 
 
 Despite many legends about the current state of python packaging, contributing
-to such infrastructure is less scary than usually depicted, and should be more
-friendly with recent changes.
-
+to this infrastructure is less scary than usually depicted. Recent improvements
+documentation continues to improve contributor friendliness.
 
 Outline
 =======
 
   1. Intro (4min):
 
-    - Who am I/Who are we
+    - Who am I(the presenter) and Who are we(the authors)
     - History of Python releases/ End of life.
     - The Python 3 statement.
         - Some library will migrate to Python 3 only by 2020.
         - We don't want it to be a hassle for Python 2 users.
         - We might want to have a Python 2 LTS.
+    - We <3 users of Python <3
 
   2. The Problems, and solutions (12 min)
 
@@ -224,13 +254,13 @@ Outline
         - Read info from the `simple-repository`
     - Warehouse vs PyPI legacy
         - Warehouse 100% coverage, docker based, easy to contribute.
-        - PyPI legacy. Here be dragon. (much less dragons now)
+        - PyPI legacy. Here be dragons. (many fewer dragons now)
         - Share a single DB. Bottle neck that needed to refactor for speed.
     - You too can contribute to Python packaging now
 
-  4. TL;DL (too long didn't listen), AKA conclusion.
+  4. TL;DL (too long didn't listen), AKA conclusion. (2min)
 
-    - use PIP 9
+    - use pip 9+
     - upgrade setuptools
     - Question and Contribution to gotchas, read and contribute to
       python3statement practicalities section.
