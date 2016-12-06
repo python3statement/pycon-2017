@@ -252,11 +252,11 @@ Outline
         - Read info from the `simple-repository`
     - Warehouse vs PyPI legacy
         - Warehouse 100% coverage, docker based, easy to contribute.
-        - PyPI legacy. Here be dragon. (much less dragons now)
+        - PyPI legacy. Here be dragons. (many fewer dragons now)
         - Share a single DB. Bottle neck that needed to refactor for speed.
     - You too can contribute to Python packaging now
 
-  4. TL;DL (too long didn't listen), AKA conclusion.
+  4. TL;DL (too long didn't listen), AKA conclusion. (2min)
 
     - use pip 9+
     - upgrade setuptools
