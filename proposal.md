@@ -17,7 +17,7 @@ Summary
 =======
 
 
-> "Four shalt thou not count, neither shalt thou count two, excepting that thou
+> "Four shalt thou not count, neither count thou two, excepting that thou
 then proceed to three."
 
 Python 3 has been around for more than eight years, and much of the Python
