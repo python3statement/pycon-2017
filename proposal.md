@@ -62,7 +62,7 @@ In the first part, we will describe our quest, focusing on movements toward Pyth
 
 In the second part, we will describe several ways to approach the transition
 itself, complete with a discussion of the merits and demerits of each approach.
-In particular, we will focus on our new solution that avoids many of the
+In particular, we will end with a focus on our new solution that avoids many of the
 pitfalls of earlier solutions. 
 
 In the third part, we describe the work needed in order to make to implement
@@ -78,9 +78,13 @@ systems.
 Users and developers of Python 2 libraries, who want to make sure their systems
 don't upgrade to incompatible versions of once-compatible packages.
 
+User and developers of Python 2 and 3 libraries who wish to transition to a
+Python 3 only codebase, but who want to ensure a path for Python 2 users to
+continue to use older versions of the software or "Long Term Support" versions
+of the software.  
+
 User and developers of Python 3 libraries who care about Python 2 users and
 developers.
-
 
 Objective
 =========
@@ -90,14 +94,13 @@ Objective
    and developers that some packages are migrating to require Python 3, and how
    to do it without breaking users' systems.
 
- - Make users aware that they should be using pip 9+ and setuptools 24.3+ to avoid
-   problems in their Python 2 installation.
+ - Make users and community leaders aware that they should be using pip 9+ and
+   setuptools 24.3+ to avoid problems in their Python 2 installation.
 
  - Make developers aware of the recent changes in Python Packaging
    (`python_requres` metadata) and how to make use of it.
 
- - The traps not to fall into if you plan to release a Python 3 only package
-   version.
+ - The traps to avoid if you plan to release a Python 3 only version of your package.
 
 
 Detailed Abstract
@@ -126,30 +129,34 @@ disrupt the Python 2 ecosystem"
 --------------------------------
 
 We'll dive into various solutions that could be or have to be used (as of mid
-2016) to release a python 3 only package. While it is possible to tag wheels as
+2016) to release a Python 3 only package. While it is possible to tag wheels as
 being Python 3 only, a Python 2 installation with pip `<9.0` will consider the
-latest `.tar.gz` of a package are the "most recent" and compatible with Python
-2, thus breaking user system after upgrade, – at best – on install, at worst
-during runtime.
+latest `.tar.gz` of a package as the "most recent version". It will treat it as
+compatible with Python 2, thereby breaking users' systems after they upgrade
+(without any warning being given). Worse, if even one  dependency upgrades in this
+manner, that will still be enough to break users' systems. 
 
-Several workaround are possible, from deploying a meta-package with conditional
-requirement, uploading wheel only packages or relaying on
-little-known-and-not-really-a-feature of oldest pip versions.
+Several workarounds are possible. This includes (META: we should give examples for each)
+    - deploying a meta-package with conditional requirements 
+    - uploading wheel only packages 
+    - changing your package name 
+    - using a little-known feature (that is not really a feature) of oldest pip versions.
 
-
-It's easier now !
-    - Use setuptools > 24.3, this allows you to set the `python_requires` medatada.
+It's easier now!
+    - Use setuptools > 24.3, this allows you to set the `python_requires` metadata.
     - Add a `python_requires` to your `setup.py`
-    - Use (and have your users use pip 9.0+ it understand `python_requires`
+    - Use (and have your users use) pip 9.0+, because it understand `python_requires`
 
-Of course there will always be case where one of the above requirement will not
-be true on user machine.
+There will always be cases where one of the above requirements will not be true
+on some users' machines, particularly if they do not upgrade their pip.  But,
+this is why it is even more important to encourage Python 2 users to upgrade
+their pip version to 9.0+. 
 
 Regardless of the failures it is _critical_ to provide users with the right
-error messages _and solution_. Providing _early_
-warnings to regular library users that things are about to change is helpful to
-reduce the dissatisfaction from users and flow of bug report to your dev team
-post-transition.
+error messages and _solutions_ to the problems that arise. Providing _early_
+warnings to regular library users that things are soon to change helps helpful
+reduce user surprise and dissatisfaction, which should also stem the flow of
+the inevitable compatibility related bug reports.
 
 
 3. Under the Hood – Updating the Python Packaging stack
