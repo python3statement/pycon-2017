@@ -58,7 +58,9 @@ Description
 
 This talk will have 3 main parts:
 
-In the first part, we will describe our quest, focusing on movements toward Python 3 and the concerns that arise for library developers who wish to end support for Python 2. 
+In the first part, we will describe our quest, focusing on movements toward
+Python 3 and the concerns that arise for library developers who wish to end
+support for Python 2. 
 
 In the second part, we will describe several ways to approach the transition
 itself, complete with a discussion of the merits and demerits of each approach.
