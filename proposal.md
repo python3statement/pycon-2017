@@ -30,7 +30,7 @@ a release as Python 3 only, today it is possible.
 Like any maintainer of a widely used library, we want to ensure that users
 still using Python 2 can still have a functioning library, even after
 development proceeds in a way that does not support Python 2. One way to ensure
-that is to allow easy installation older versions; another way is to have a
+that is to allow easy installation of older versions; another way is to have a
 parallel "Long Term Support" variant that a different community of developers
 supports going forward. At the same time, it is not reasonable to expect users
 to explicitly pin maximal version dependencies in all of their projects and
