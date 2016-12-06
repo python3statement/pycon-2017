@@ -154,29 +154,30 @@ their pip version to 9.0+.
 
 Regardless of the failures it is _critical_ to provide users with the right
 error messages and _solutions_ to the problems that arise. Providing _early_
-warnings to regular library users that things are soon to change helps helpful
-reduce user surprise and dissatisfaction, which should also stem the flow of
-the inevitable compatibility related bug reports.
+warnings to regular library users that things are soon to change helps reduce
+user surprise and dissatisfaction, which should also stem the flow of the
+inevitable compatibility related bug reports.
 
 
 3. Under the Hood – Updating the Python Packaging stack
 -------------------------------------------------------
 
-While Pep 5xx describe a mechanism by which a package can be tagged as Python 3
-only this currently does not work for various reasons. Indeed for a Python 3 only
-package to be installed 2 critical pieces of software need to understand this metadata:
+While Pep 5xx describes a mechanism by which a package can be tagged as Python 3
+only, this currently does not work for a variety of reasons. Indeed, for a Python 3 only
+package to be installed, 2 critical pieces of software need to understand this metadata:
 
 
 A) The package manger
 
-For a package to install only on compatible python versions, the package need
-to have access to the compatibility information. Beyond some (previously
-mentioned "features", and alternate package manager (yum, apt, conda), pip <9.0
-does not understand the `requires_python` metadata. It is _prefereable_ for the
-Package manager to get this information _before_ downloading and (trying to)
-install packages. Understanding how pip does get this information from the
-package repository and how pip makes its decision is useful for any team with
-internals deployments, and to be able to understand errors users can encounter.
+For a package to install only on compatible python versions, the package needs
+to access the compatibility information. Excepting some previously mentioned
+"pseudo-features", pip <9.0 cannot understand the `requires_python` metadata.
+It is _prefereable_ for the Package manager to get this information _before_
+downloading or (trying to) install packages. It is useful to understand how
+pip gets this information from the package repository and how pip makes its
+decision. It is particularly useful for any team with internal deployments, in
+order to be able to understand the origin of the errors not-up-to-date users
+will encounter.
 
 Pip does parse what is called a `simple repository` format, lo list the
 available files  for a given package. Information about the package are
