@@ -3,6 +3,9 @@
 
 :Title: Lobbing the Holy Hand Grenade: Fixing Python packaging to nullify the 
 dangerous rabbit-den that lurks within the sunset of Python 2 support 
+
+Alt :  Ending Py2/py3 compatibility in a user friendly manner /// No enough mention of py2/py3
+
 :Duration: 30/45 minutes
 :Level: Intermediate
 :Categories: General, Python 2, Python 3, Packaging, Best Practices.
@@ -68,7 +71,8 @@ In particular, we will end with a focus on our new solution that avoids many of 
 pitfalls of earlier solutions. 
 
 In the third part, we describe the work needed in order to make to implement
-the newest solution and how it avoids unleashing rabbits on unsuspecting Python 2 users.
+the newest solution and how it avoids unleashing rabbits on unsuspecting Python
+2 users.
 
 Audience
 ========
@@ -138,11 +142,92 @@ compatible with Python 2, thereby breaking users' systems after they upgrade
 (without any warning being given). Worse, if even one  dependency upgrades in this
 manner, that will still be enough to break users' systems. 
 
-Several workarounds are possible. This includes (META: we should give examples for each)
-    - deploying a meta-package with conditional requirements 
-    - uploading wheel only packages 
-    - changing your package name 
-    - using a little-known feature (that is not really a feature) of oldest pip versions.
+Several workarounds are possible. This includes (META: we should give examples
+for each)
+
+Do Nothing
+~~~~~~~~~~
+
+Do nothing. Just release your new package that uses Python 3 only feature.
+
+It's super easy. You just need to release. 
+
+The drawbacks is that some users (dependees' maintainers) will chase you to the
+end of the world with a chainsaw because you broke their system. You likely
+don't want that.
+
+Example: Nikolas
+
+Metapackage
+~~~~~~~~~~~
+
+It is possible to release a meta-package that has _virtually_ no code and rely
+on conditional dependency to install its actual core code on the user system.
+For example, Frob-6.0 could be a meta-package which depends on
+Frob-real-py2 on Python <3.0, and Frob-real-py3 on Python >= 3.4. While
+this approach is _doable_ this can make import confusing.
+
+Using a metapackage has the advantage of not changing the package name, though
+it requires to publish a second package on PyPI, potentially with a confusing
+name. For example : Frob-6.0 (metapackage), FrobForPy3-60 (dependency). This is
+annoying from the developers side, who have to maintain 2 packages, and from
+user perspective, errors might come from FrobFromPy3.
+
+Moreover, upgrading your package may need the user to explicitly tell pip to
+upgrade dependencies as `pip install -U frob` would only upgrade the
+meta-package.
+
+Example: None to our knowledge, but we considered it for IPython.
+
+Wheel only
+~~~~~~~~~~
+
+Releasing a package as wheel only can allow you to release for Python 3 only.
+
+For pure python packages it is relatively easy to do.
+
+Many system (and downstream distributors) do though rely – or prefer – a
+source-distribution. It is not possible to release wheels for all packages.
+Wheels also make a strict Python 2 vs Python 3 dichotomy so do not allow you to
+express dependency on minor python revisions.
+
+Example: flit
+
+Change your package name
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Of course instead of releasing a new version you can decide to make a full new
+package with a new name.
+
+Then it's obvious from the package name on which system your users are working. 
+
+Though it needs all user to become _aware_ of the new name, and migrate to it
+_explicitely_. It will also invalidate most of the user habits and already
+available documentation available online.
+
+Example: ???
+
+Release multiple Sdist
+~~~~~~~~~~~~~~~~~~~~~~
+
+A little know feature of pip, is that if your sdist name ends in `py-X.y`, then
+this sdist will only be installed on Python X.y. 
+
+Thus you can target only a subset of Python minor version by publishing
+multiple sdist. So you _can_ even release only every-other release of Python. 
+
+In the other hand, you _have_ to publish N source-dist, including potential
+future version of Python. Is the version of Python post 3.9 be 3.10 or 4 ?
+
+Also PyPI does not allow you to upload multiple sdist. So this one is out
+anyway !
+
+Example: (??? Ask Donald)
+
+
+The new way
+~~~~~~~~~~~
+
 
 It's easier now!
     - Use setuptools > 24.3, this allows you to set the `python_requires` metadata.
