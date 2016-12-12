@@ -4,8 +4,7 @@
 :Title: Lobbing the Holy Hand Grenade: Fixing Python packaging to nullify the
 dangerous rabbit-den that lurks within the sunset of Python 2 support
 
-Alt :  Ending Py2/Py3 compatibility in a user friendly manner /// No enough mention of py2/py3
-Alt2 : Leaving Python 2 behind without leaving Python 2 users in the dust
+Alt :  Ending Py2/Py3 compatibility in a user friendly manner
 :Duration: 30/45 minutes
 :Level: Intermediate
 :Categories: General, Python 2, Python 3, Packaging, Best Practices.
@@ -18,6 +17,8 @@ Summary
 
 > "Four shalt thou not count, neither count thou two, excepting that thou
 then proceed to three."
+
+>> Monty Python and the Holy Grail; Scene 33
 
 Python 3 has been around for more than eight years, and much of the Python
 ecosystem is now available both on Python 2 and Python 3, often using a single
@@ -175,8 +176,7 @@ upgrade (and will give no warning about what is happening).  Worse, if even one
 dependency upgrades in this manner, that will still be enough to break users'
 systems.
 
-Several workarounds were possible then. This includes (META: we should give
-examples for each)
+Several workarounds were possible then. 
 
 Do Nothing
 ~~~~~~~~~~
@@ -212,7 +212,8 @@ Example: ???
 Wheel only
 ~~~~~~~~~~
 
-Releasing a package only as a wheel can allow you to avoid pip `<9.0`'s Python 3 only problem with `tar.gz`s.
+Releasing a package only as a wheel can allow you to avoid pip `<9.0`'s Python
+3 only problem with `tar.gz`s.
 
 For pure python packages, this is relatively easy to do.
 
@@ -260,21 +261,11 @@ On the other hand, you _have_ to publish N source-dist for you package. And,
 this includes potential future version of Python which requires making tough,
 unknowable decisions. Is the version of Python post 3.9 be 3.10 or 4 ?
 
-META: ^^ could someone please explain this better; why not just not release an
-sdist for that version until it is actually released? why is this a problem?
-
-RESPONSE : Because you can only release an SDIST for:
- - All version of Python 
- - A minor version. 
-You can't target only a minor as your user not solely consist of a specific minor version of Python. 
+You can't target only a minor as your user not solely consist of a specific
+minor version of Python. 
 
 Also, PyPI does not allow you to upload multiple sdist. So this solution won't
 work if you want to be in the cheeseshop anyway!
-
-META: ^^ Does this apply to both legacy and warehouse? Both.
-RESPONSE : Same DB. Also fewer and fewer people know what the cheeses chop is. 
-
-Example: (??? Ask Donald)
 
 The new way
 ~~~~~~~~~~~
@@ -284,44 +275,44 @@ It's easier now!
 If you use setuptools > 24.2, you can set the `python_requires` metadata in
 your `setup.py`. Recent changes to PyPI/warehouse returns `python_requires`
 metadata in response to API calls. Pip 9.0+ knows how to make and interpret
-those API calls. This means that if you use setuptools 24.2+ and set
-`python_requires` metadata, and your users are using pip 9.0+, then it will
-only install versions of your software that are explicitly compatible with
-their system, even if your newest release is Python 3 only!
+those API calls. This means that if you use setuptools 24.2+,  set
+`python_requires` metadata, and your users are using pip 9.0+, then pip will
+only install versions of your software that explicitly compatible with the
+currently running version of Python, even if your newest release is Python 3
+only!
 
-This avoids most of the downsides of other solutions: You don't need to change
-package names. You don't need to create a new package. You don't need to
-release wheels only. Most importantly, you don't need to abandon your users,
-and you don't need to jump through hoops to avoid doing so.  It can be as
-simple as a single line change to your source.
+This avoids most of the downsides of other solutions: Ni need to change package
+names. No need to create a new package. No need to release wheels only. Most
+importantly, no to abandon your users, and no need to jump through hoops to
+avoid doing so.  It can be as simple as a single line change to your source.
 
-There are downsides, but they are of a different type. For example, it won't
-work for your users who haven't upgrade to pip 9.0+. Sometime it may not work
-if they don't have setuptools 24.2+.
-
-META: ^^ why does it only sometimes not work if they don't have setuptools
-24.2, is it if they build from source? Or why else would this be a problem?
-
-RESPONSE: It's not a temporal sometimes it's on a per-package case. If a
-package manager use an option of setuptools 29 which is not in setuptools 23.1
-it may be that this option prevent the package to build. For example 23.1 does
-not know about python_requires. Not sure if it crashes of just ignores it.
+There are still a few downsides. For example, installing the last compatible
+version won't work for your users with pip < 9.0. Installation may fail as well
+if setuptools < 24.2 is used, as newer versions of setuptools understand more
+arguments for `setup()`.
 
 This is why it is all the more important to encourage Python 2 users (in
 particular) to upgrade their pip version to 9.0+.
 
 
-META: vv This sounds out of tone for everything else. We don't need to hand
-wring, this seems like a general point that we should make before listing
-things as it doesn't specifically apply to the new solution
+Mitigations in case of failure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RESPONSE: SURE.
+Despite all the best effort put into ensuring a non compatible version will not
+try to be installed, this might still happen and lead to failure of the
+installation process, or at import of the library. Regardless of the failures
+it is _critical_ to provide users with the right error messages and _solutions_
+to the problems that arise. Providing _early_ warnings to regular library users
+that things are soon to change helps reduce user surprise and dissatisfaction,
+which should also stem the flow of the inevitable compatibility related bug
+reports.
 
-Regardless of the failures it is _critical_ to provide users with the right
-error messages and _solutions_ to the problems that arise. Providing _early_
-warnings to regular library users that things are soon to change helps reduce
-user surprise and dissatisfaction, which should also stem the flow of the
-inevitable compatibility related bug reports.
+There are a variety of countermeasure and mitigation that can be deploy to make
+sure these care are as rare as possible, leave the installation in the usable
+state. 
+
+Conditional dependency depending on the Python version in dependents package is
+one of the mitigation we will discuss. 
 
 
 3. Under the Hood – Updating the Python Packaging stack
@@ -344,32 +335,18 @@ internal deployments: it is crucial that you understand these inner workings so
 you can diagnose the origin of the errors that users who are not up-to-date
 will encounter.
 
-META: vv Which version of pip parses that? All versions? If so why is 9.0+ special? 
-
-RESPONSE: It's complicated what is parsed when and how and in which case. 9.0+
-has a more consisted behavior. Pip 9.0+ is the only one that understand
-`python_requires` on Sdist on explicit install. 
-
 Pip parses what is called a `simple repository` format, which lists the
 available files for a given package. Information about the package is extracted
-from its _name_, and (since pip 9.0) from the `data-`attributes provided in the
-HTML. This allows pip to ignore package versions incompatible with the current
-Python version without even needing to download it to test for compatibility.
+from its _name_, and (since pip 9.0) from the newly introduced
+`data-`attributes provided in the HTML. This allows pip 9.0+ to ignore package
+versions incompatible with the current Python in usage without even needing to
+download it to test for compatibility.
 
 
 B) The Package index.
 
-META: vv which parts were lacking? 
-
-RESPONSE: Stuff we can expand. 
-
 While the package index (aka PyPI), stores some of this information, it lacked
-exposing it to pip. Even if it _had_ the `python_requries` information stored,
-there still was no way to query this information efficiently. There is still a
-debate as to whether the required Python version is per file, or per release.
-
-META: vv what is this paragraph accomplishing beyond the rest of the content?
-RESPONSE : Introcuse why we speak about the package infrastructure
+exposing it to pip, and querying this information was extremely slow.
 
 The current Package distribution infrastructure is a (complex) beast, it is
 interesting to dive into it, see the current status, and what changes can come
@@ -377,49 +354,24 @@ in a near, or further future. Additionally, by seeing what changes cannot be
 made given the current environment, we can learn about the inner workings of
 some of the most important parts of the python ecosystem.
 
-We'll discuss how package information is stored and how we changed it.  PyPI
-legacy and warehouse share a database.  Any change is tricky as PyPI legacy has
+We'll discuss how package information is stored and how we changed it. PyPI
+legacy and warehouse share a database. Any change is tricky as PyPI legacy has
 close to no tests at all, despite its crucial place in the Python ecosystem. 
 
-META: vv what do you mean by a future facing manner? What does it mean to
-"source the correct information"; Do you mean setuptools 24.2? If so, say that. 
+In order to make the simple-repository metadata available in a fast an
+consistent manner, we modified the common database to ensure it houses and
+maintains the correct information. We'll discuss why the `python_requires`
+field is set on a per-file basis, while it is supposed to apply to a release.
 
-RESPONSE: I Don't know might have been a typo
-
-In order to make the solution available in a future facing manner, we modified
-the common database to ensure it houses and maintains the correct information.  
-
-META: vv Can someone take a stab at turning this into a more narrative bit?
-E.g., why was it a processing bottle-neck? Why was there processing at all,
-it's a static database, right? 
-
-RESPONSe : We can develop in the talk. 
-
-At first, we attempted to directly set the `require_python` info on the
-`release` table of PyPI by using a `JOIN` operation, which unfortunately turned
-out to be a processing bottle neck. 
-
-Instead, we had to alter tables directly using TRIGGERS when new packages were
-on either using either PyPI or warehouse mechanisms.  
-
-META: vv Is that still a necessary line?
-
-RESPONSE: No
-
-This would have been
-sufficient, but PyPI-legacy was operating in unexpected ways on the database…
-
-META: vv what does this section give us?
-
-RESPONSE: Get people to not be scared in contributing. 
+In a perfect world this would have of course work in a first try, but this was
+without counting that PyPI-legacy was operating in unexpected ways on the
+database. We'll discuss a bit how PyPI-legacy differs from warehouse, (And how
+to configure your system to use warehouse which is better harder, faster
+stronger.)
 
 Despite many legends about the current state of python packaging, contributing
 to this infrastructure is less scary than usually depicted. Recent improvements
-documentation continues to improve contributor friendliness.
-
-META: detail more clearly the changes to the PEP that were needed.
-
-RESPONSE: Do it in the talk, maybe. ANd it will be likely earlier when introducing the data-attribute
+documentation continues to improve contributor friendliness ! 
 
 Outline
 =======
@@ -446,7 +398,7 @@ Outline
       - Still users might not have the right setuptools.
         They will install a non-workign version.
       - Fail early at runtime. With a clear error message.
-    - PIP < 9.0  does not understood this medatata item.
+    - PIP < 9.0 does not understood this medatata item.
       - Fail early at setup.
 
   3. Under the hood (7min)
@@ -471,24 +423,26 @@ Outline
       python3statement practicalities section.
 
 
-Ideas,
-
-why you would like (or not) make the transition
-Warning pep 440 !
-Does not apply to Python 3 only _new_ libraries.
-
-Who are the affected people:
-
- - Everyone ! As long as you use more than 2 minor versions of Python in you
-   life. We _believe_ the most common use case is user of Python 2 that will
-   `pip install (--upgrade?)` a library which goes from "single-source" to only
-   Py3.
-
-
-
- -
 
 ## Miscs Previous Talks from Authors:
+
+If we are allocated 45 minutes, we will mainly develop the potential failure of
+the `python_require` approach when user do not have a completely up to date
+system. What ha pend in which circumstances, as well as what are the mitigation
+that can be deployed. In particular how one can use conditional dependencies on
+dependees (when one have control of these) to require compatible versions of
+the libraries. 
+
+We will also develop why and how to trigger error messages early at install and
+import time. As well as gotchas. Indeed raising an explicit error messages and
+making sure that `setup.py` as well as `__init__.py` are Python 2 compatible to
+great the user with an informative error message and not a syntax error.
+
+The reason of why some of these error can be triggered can be unclear, in
+particular a common mistake would be to `raise` in `setup.py` and indicate that
+the current package is not compatible with Python 2,  which is technically true
+but non informative for the user. As the main reason would likely be that the
+user has not installed pip 9.0+.
 
 ### Matthias Bussonnier
 
