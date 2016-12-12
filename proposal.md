@@ -154,13 +154,16 @@ Upgrading should be made as seamless as possible, regardless of which Python
 version is being used. Breaking user's systems during an upgrade can only
 reinforce the feeling that "Python Packaging is broken" and the (inaccurate)
 impression that "Python 3 zealots are introducing incompatibilities only to
-disrupt the Python 2 ecosystem."
+disrupt the Python 2 ecosystem." In fact, developers who are interested in
+moving toward Python 3 care deeply about those who wish to still use Python 2
+and are working hard to make it possible for the two ecosystems to live in
+harmony.  
 
 2. The gotchas and old solutions
 --------------------------------
 
-We'll dive into various solutions that could be or have to be used (as of mid
-2016) to release a Python 3 only package. While it is possible to tag wheels as
+We'll dive into various solutions that were available as of mid
+2016 if you wished to release a Python 3 only package. While it is possible to tag wheels as
 being Python 3 only, a Python 2 installation with pip `<9.0` will consider the
 latest `.tar.gz` of a package as the "most recent version". It will treat it as
 compatible with Python 2, thereby breaking users' systems after they upgrade
