@@ -62,7 +62,6 @@ requirements of the packages they depend on to pin those at the last version
 compatible with Python 2. Such a situation is untenable. Users that want to use
 Python 2 should not have to go through so much anguish to do so. 
 
-
 In order to solve this problem, and thereby make both users' and maintainers'
 lives easier, we ventured into the rabbit-hole called Packaging.
 
@@ -107,11 +106,11 @@ don't upgrade to incompatible versions of once-compatible packages.
 
 User and developers of Python 2 and 3 libraries who wish to transition to a
 Python 3 only codebase, but who want to ensure a path for Python 2 users to
-continue to use older versions of the software or "Long Term Support" versions
-of the software.
+continue to use their software. 
 
-User and developers of Python 3 libraries who care about Python 2 users and
-developers.
+User and developers of Python 3 libraries who want to see more libraries
+shifting to Python 3, but who do not want to harm the existing, vibrant Python
+2 user and developer communities.
 
 Objective
 =========
