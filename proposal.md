@@ -127,31 +127,34 @@ Objective
  - Make developers aware of the recent changes in Python Packaging
    (`python_requres` metadata) and how to make use of it.
 
- - Inform developers of the traps facing the release of a Python 3 only version of your
-   package and give tools to avoid those traps.
+ - Inform developers of the traps facing the release of a Python 3 only version
+   of your package and give tools to avoid those traps.
 
 
 Detailed Abstract
 =================
 
-1. Intro The Python 3 statement and ipythoN
--------------------------------
+1. Intro: The Python 3 statement and IPython
+--------------------------------------------
 
 A growing number of libraries and library authors have announced that they are
-planning on stopping support for Python 2, no later than 2020, if not already.
-It is also known that a number of users will not migrate their Python 3 by that
-day.
+planning on stopping support for Python 2, no later than 2020, if not by the
+time of PyCon. It is also known that a number of users will not migrate to 
+Python 3 by the time that that change happens.
 
-Currently releasing a Python-3 only version of the library while ensuring that
-Python 2 user will still install the last Python 2 compatible version not
-upgrade by mistake is hard.
+Currently, these "once-compatible" packages – packages that at one time were
+compatible with Python 2 and 3, but are now releasing a Python-3 only version
+of the package – create a danger for that libraries extant Python 2 users. In
+particular, the challenge lies in ensuring that Python 2 users will install or
+upgrade to the most recent Python 2 compatible version of the package. The ease
+of upgrading by mistake is too great, and the annoyance is particularly
+trenchant as the issue may not manifest until run-time.
 
-Ensuring regardless of Python version in use, library upgrade is as seamless as
-possible is crucial. Having long-time user system broken during an upgrade can
-only reinforce the feeling that "Python Packaging is broken" and the wrong
+Upgrading should be made as seamless as possible, regardless of which Python
+version is being used. Breaking user's systems during an upgrade can only
+reinforce the feeling that "Python Packaging is broken" and the (inaccurate)
 impression that "Python 3 zealots are introducing incompatibilities only to
-disrupt the Python 2 ecosystem"
-
+disrupt the Python 2 ecosystem."
 
 2. The gotchas and old solutions
 --------------------------------
