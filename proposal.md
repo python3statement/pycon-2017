@@ -331,43 +331,64 @@ internal deployments: it is crucial that you understand these inner workings so
 you can diagnose the origin of the errors that users who are not up-to-date
 will encounter.
 
-Pip does parse what is called a `simple repository` format, lo list the
-available files  for a given package. Information about the package are
-extracted from its _name_, and since pip 9.0 from the `data-`attributes
-provided in the HTML. This now allows pip to not bother with downloading a file
-(let alone trying to install) when the current Python version is not
-compatible.
+META: vv Which version of pip parses that? All versions? If so why is 9.0+ special? 
+
+Pip parses what is called a `simple repository` format, which lists the
+available files for a given package. Information about the package is extracted
+from its _name_, and (since pip 9.0) from the `data-`attributes provided in the
+HTML. This allows pip to ignore package versions incompatible with the current
+Python version without even needing to download it to test for compatibility.
 
 
 B) The Package index.
 
-While the package index (aka PyPI), stores some of this information, it lacked
-what was needed. If it had been stored, there still was no way to query this
-information, nor to expose it to pip.
+META: vv which parts were lacking? 
 
-(META: what is this paragraph accomplishing beyond the rest of the content?)
+While the package index (aka PyPI), stores some of this information, it lacked
+some parts of what was needed. Even if it _had_ been stored, there still was no
+way to query this information, nor to expose it to pip.
+
+META: vv what is this paragraph accomplishing beyond the rest of the content?
+
 The current Package distribution infrastructure is a (complex) beast, it is
 interesting to dive into it, see the current status, and what changes can come
 in a near, or further future. Additionally, by seeing what changes cannot be
 made given the current environment, we can learn about the inner workings of
 some of the most important parts of the python ecosystem.
 
-We'll have a look on how the package information is stored and see what we did.
-PyPI legacy and warehouse share a database. Any change is tricky as PyPI legacy
-has close to no tests at all, despite its crucial place in the Python
-ecosystem. In order to make the solution available in a future facing manner,
-we modified the common database to make it source the correct information.  At
-first, we attempted to directly set the `require_python` info on the `release`
-table of PyPI by using a `JOIN` operation, which unfortunately turned out to be
-a processing bottle neck. Instead, we had to altered the tables directly (using
-TRIGGERS).  This would have been sufficient, but PyPI-legacy was operating in
-unexpected ways on the database…
+We'll discuss how package information is stored and how we changed it.  PyPI
+legacy and warehouse share a database.  Any change is tricky as PyPI legacy has
+close to no tests at all, despite its crucial place in the Python ecosystem. 
+
+META: vv what do you mean by a future facing manner? What does it mean to
+"source the correct information"; Do you mean setuptools 24.2? If so, say that. 
+
+In order to make the solution available in a future facing manner, we modified
+the common database to ensure it houses and maintains the correct information.  
+
+META: vv Can someone take a stab at turning this into a more narrative bit?
+E.g., why was it a processing bottle-neck? Why was there processing at all,
+it's a static database, right? 
+
+At first, we attempted to directly set the `require_python` info on the
+`release` table of PyPI by using a `JOIN` operation, which unfortunately turned
+out to be a processing bottle neck. 
+
+Instead, we had to alter tables directly using TRIGGERS when new packages were
+on either using either PyPI or warehouse mechanisms.  
+
+META: vv Is that still a necessary line?
+
+This would have been
+sufficient, but PyPI-legacy was operating in unexpected ways on the database…
+
+META: vv what does this section give us?
 
 Despite many legends about the current state of python packaging, contributing
 to this infrastructure is less scary than usually depicted. Recent improvements
 documentation continues to improve contributor friendliness.
 
-META: Changes to the PEP.
+META: detail more clearly the changes to the PEP that were needed.
 
 Outline
 =======
