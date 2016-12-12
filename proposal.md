@@ -22,7 +22,9 @@ then proceed to three."
 Python 3 has been around for more than eight years, and much of the Python
 ecosystem is now available both on Python 2 and Python 3, often using a single
 code base. Nonetheless, this compatibility comes at a development cost and some
-library authors are considering ending support for Python 2 in newer versions. 
+library authors are considering ending support for Python 2 in newer versions.
+These "once-compatible" libraries pose a real danger for maintaining a smoothly
+functioning Python 2 system.
 
 While it may seem simple to cease support for Python 2, the challenge is not in
 ending support, but doing so in a way that does not wreak havoc for users who
