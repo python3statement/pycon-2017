@@ -263,10 +263,16 @@ unknowable decisions. Is the version of Python post 3.9 be 3.10 or 4 ?
 META: ^^ could someone please explain this better; why not just not release an
 sdist for that version until it is actually released? why is this a problem?
 
+RESPONSE : Because you can only release an SDIST for:
+ - All version of Python 
+ - A minor version. 
+You can't target only a minor as your user not solely consist of a specific minor version of Python. 
+
 Also, PyPI does not allow you to upload multiple sdist. So this solution won't
 work if you want to be in the cheeseshop anyway!
 
-META: ^^ Does this apply to both legacy and warehouse?
+META: ^^ Does this apply to both legacy and warehouse? Both.
+RESPONSE : Same DB. Also fewer and fewer people know what the cheeses chop is. 
 
 Example: (??? Ask Donald)
 
@@ -296,6 +302,11 @@ if they don't have setuptools 24.2+.
 META: ^^ why does it only sometimes not work if they don't have setuptools
 24.2, is it if they build from source? Or why else would this be a problem?
 
+RESPONSE: It's not a temporal sometimes it's on a per-package case. If a
+package manager use an option of setuptools 29 which is not in setuptools 23.1
+it may be that this option prevent the package to build. For example 23.1 does
+not know about python_requires. Not sure if it crashes of just ignores it.
+
 This is why it is all the more important to encourage Python 2 users (in
 particular) to upgrade their pip version to 9.0+.
 
@@ -303,6 +314,8 @@ particular) to upgrade their pip version to 9.0+.
 META: vv This sounds out of tone for everything else. We don't need to hand
 wring, this seems like a general point that we should make before listing
 things as it doesn't specifically apply to the new solution
+
+RESPONSE: SURE.
 
 Regardless of the failures it is _critical_ to provide users with the right
 error messages and _solutions_ to the problems that arise. Providing _early_
@@ -333,6 +346,10 @@ will encounter.
 
 META: vv Which version of pip parses that? All versions? If so why is 9.0+ special? 
 
+RESPONSE: It's complicated what is parsed when and how and in which case. 9.0+
+has a more consisted behavior. Pip 9.0+ is the only one that understand
+`python_requires` on Sdist on explicit install. 
+
 Pip parses what is called a `simple repository` format, which lists the
 available files for a given package. Information about the package is extracted
 from its _name_, and (since pip 9.0) from the `data-`attributes provided in the
@@ -344,11 +361,15 @@ B) The Package index.
 
 META: vv which parts were lacking? 
 
+RESPONSE: Stuff we can expand. 
+
 While the package index (aka PyPI), stores some of this information, it lacked
-some parts of what was needed. Even if it _had_ been stored, there still was no
-way to query this information, nor to expose it to pip.
+exposing it to pip. Even if it _had_ the `python_requries` information stored,
+there still was no way to query this information efficiently. There is still a
+debate as to whether the required Python version is per file, or per release.
 
 META: vv what is this paragraph accomplishing beyond the rest of the content?
+RESPONSE : Introcuse why we speak about the package infrastructure
 
 The current Package distribution infrastructure is a (complex) beast, it is
 interesting to dive into it, see the current status, and what changes can come
@@ -363,12 +384,16 @@ close to no tests at all, despite its crucial place in the Python ecosystem.
 META: vv what do you mean by a future facing manner? What does it mean to
 "source the correct information"; Do you mean setuptools 24.2? If so, say that. 
 
+RESPONSE: I Don't know might have been a typo
+
 In order to make the solution available in a future facing manner, we modified
 the common database to ensure it houses and maintains the correct information.  
 
 META: vv Can someone take a stab at turning this into a more narrative bit?
 E.g., why was it a processing bottle-neck? Why was there processing at all,
 it's a static database, right? 
+
+RESPONSe : We can develop in the talk. 
 
 At first, we attempted to directly set the `require_python` info on the
 `release` table of PyPI by using a `JOIN` operation, which unfortunately turned
@@ -379,16 +404,22 @@ on either using either PyPI or warehouse mechanisms.
 
 META: vv Is that still a necessary line?
 
+RESPONSE: No
+
 This would have been
 sufficient, but PyPI-legacy was operating in unexpected ways on the database…
 
 META: vv what does this section give us?
+
+RESPONSE: Get people to not be scared in contributing. 
 
 Despite many legends about the current state of python packaging, contributing
 to this infrastructure is less scary than usually depicted. Recent improvements
 documentation continues to improve contributor friendliness.
 
 META: detail more clearly the changes to the PEP that were needed.
+
+RESPONSE: Do it in the talk, maybe. ANd it will be likely earlier when introducing the data-attribute
 
 Outline
 =======
