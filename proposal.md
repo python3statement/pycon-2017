@@ -487,3 +487,26 @@ Who are the affected people:
 
 
  -
+
+## Miscs Previous Talks from Authors:
+
+### Matthias Bussonnier
+
+- Xonsh, put some python in your shell : 
+https://www.youtube.com/watch?v=lopI4HkA9rE
+
+
+- Jupyter : Ipython, State Of Multiuser And Real Time Collaboration 
+https://www.youtube.com/watch?v=DyGoHAP8B_s
+
+- Jupyter Tutorial SciPy 2014
+
+https://www.youtube.com/watch?v=38R7jiCspkw
+
+### Michael Pacer
+
+ - Causal Bayesian NetworkX 
+https://www.youtube.com/watch?v=qWAQgWOD_nA
+
+ - Proselint: The Linting of Science Prose, and the Science of Prose Linting 
+ https://www.youtube.com/watch?v=S55EFUOu4O0
