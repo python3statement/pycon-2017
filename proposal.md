@@ -4,14 +4,13 @@
 :Title: Lobbing the Holy Hand Grenade: Fixing Python packaging to nullify the
 dangerous rabbit-den that lurks within the sunset of Python 2 support
 
-Alt :  Ending Py2/py3 compatibility in a user friendly manner /// No enough mention of py2/py3
-
+Alt :  Ending Py2/Py3 compatibility in a user friendly manner /// No enough mention of py2/py3
+Alt2 : Leaving Python 2 behind without leaving Python 2 users in the dust
 :Duration: 30/45 minutes
 :Level: Intermediate
 :Categories: General, Python 2, Python 3, Packaging, Best Practices.
 
 :Authors: Matthias Bussonnier, Michael Pacer, Thomas Kluyver, MinRK
-
 
 Summary
 =======
@@ -22,16 +21,17 @@ then proceed to three."
 
 Python 3 has been around for more than eight years, and much of the Python
 ecosystem is now available both on Python 2 and Python 3, often using a single
-code base. There comes a time in the life of such libraries when the authors
-consider stopping support for Python 2 in a new major version.
+code base. Nonetheless, this compatibility comes at a development cost and some
+library authors are considering ending support for Python 2 in newer versions. 
 
-While it may seem simple to cease support for Python 2 – if you did not want
-wreak havoc for users who wish to stay on Python 2 – you just made your life
-much more difficult. Put simply, up until recently it was not possible to tag
-a release as Python 3 only, today it is possible.
+While it may seem simple to cease support for Python 2, the challenge is not in
+ending support, but doing so in a way that does not wreak havoc for users who
+stay on Python 2. And that is not only a communications problem, but a
+technical one.  Why? Put simply, up until recently, it was impossible to tag a
+release as Python 3 only; today it is possible.
 
 Like any maintainer of a widely used library, we want to ensure that users
-still using Python 2 can still have a functioning library, even after
+continue to use Python 2 continue to have functioning libraries, even after
 development proceeds in a way that does not support Python 2. One way to ensure
 that is to allow easy installation of older versions; another way is to have a
 parallel "Long Term Support" variant that a different community of developers
