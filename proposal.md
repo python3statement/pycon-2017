@@ -66,18 +66,18 @@ Description
 
 This talk will have 3 main parts:
 
-In the first part, we will describe our quest, focusing on movements toward
-Python 3 and the concerns that arise for library developers who wish to end
-support for Python 2.
+In the first part, we will describe our quest, focusing on libraries moving to
+support only toward Python 3. This includes describing the concerns that should
+be on the mind of library developers that want end support for Python 2.
 
 In the second part, we will describe several ways to approach the transition
 itself, complete with a discussion of the merits and demerits of each approach.
 In particular, we will end with a focus on our new solution that avoids many of
 the pitfalls of earlier solutions.
 
-In the third part, we describe the work needed in order to make to implement
-the newest solution and how it avoids unleashing rabbits on unsuspecting Python
-2 users.
+In the third part, we describe the work that was needed in order to make to
+implement the newest solution and how it avoids unleashing killer rabbits on
+unsuspecting Python 2 users.
 
 Audience
 ========
