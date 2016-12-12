@@ -212,14 +212,15 @@ Example: ???
 Wheel only
 ~~~~~~~~~~
 
-Releasing a package as wheel only can allow you to release for Python 3 only.
+Releasing a package only as a wheel can allow you to avoid pip `<9.0`'s Python 3 only problem with `tar.gz`s.
 
-For pure python packages it is relatively easy to do.
+For pure python packages, this is relatively easy to do.
 
-Many system (and downstream distributors) do though rely – or prefer – a
-source-distribution. It is not possible to release wheels for all packages.
-Wheels also make a strict Python 2 vs Python 3 dichotomy so do not allow you to
-express dependency on minor python revisions.
+But there are downsides. Many systems and downstream distributors do rely on or
+prefer source-distributions. It is not possible to release wheels for all
+packages, particularly those that are not pure python packages.  Wheels make a
+strict, coarse Python 2 vs Python 3 dichotomy; this stops you from expressing
+dependencies on minor python revisions.
 
 Example: flit
 
@@ -227,20 +228,21 @@ Metapackage
 ~~~~~~~~~~~
 
 It is possible to release a meta-package that has _virtually_ no code and rely
-on conditional dependency to install its actual core code on the user system.
-For example, Frob-6.0 could be a meta-package which depends on
-Frob-real-py2 on Python <3.0, and Frob-real-py3 on Python >= 3.4. While
-this approach is _doable_ this can make import confusing.
+on conditional dependencies that install its actual core code on users' system.
+For example, Frob-6.0 could be a meta-package which depends on Frob-real-py2 on
+Python <3.0, and Frob-real-py3 on Python >= 3.4. While this approach is
+_doable_ this can make for confusing imports.
 
-Using a metapackage has the advantage of not changing the package name, though
-it requires to publish a second package on PyPI, potentially with a confusing
-name. For example : Frob-6.0 (metapackage), FrobForPy3-60 (dependency). This is
-annoying from the developers side, who have to maintain 2 packages, and from
-user perspective, errors might come from FrobFromPy3.
+Using a metapackage has many advantages, or at least lacks the disadvantages of
+the other solutions.  For example, you don't change the package name, though it
+requires a second package on PyPI, potentially leading name confusion. For
+example : Frob-6.0 (metapackage) with FrobForPy3-60 (dependency). 
 
-Moreover, upgrading your package may need the user to explicitly tell pip to
-upgrade dependencies as `pip install -U frob` would only upgrade the
-meta-package.
+One of the downsides is that this annoys developers who then have to maintain 2
+separate but dependent packages. From a user's perspective, errors might come
+from FrobFromPy3 but appear to come from Frob-6.0. Upgrading your package
+becomes more complicated, as you need the user to explicitly upgrade
+dependencies; `pip install -U frob` would only upgrade the meta-package.
 
 Example: None to our knowledge, but we considered it for IPython.
 
@@ -248,40 +250,59 @@ Example: None to our knowledge, but we considered it for IPython.
 Release multiple Sdist
 ~~~~~~~~~~~~~~~~~~~~~~
 
-A little know feature of pip, is that if your sdist name ends in `py-X.y`, then
-this sdist will only be installed on Python X.y.
+One little known feature of pip is that if your sdist name ends in `py-X.y`,
+then this sdist will only be installed on Python X.y.
 
-Thus you can target only a subset of Python minor version by publishing
-multiple sdist. So you _can_ even release only every-other release of Python.
+This allows targeting only a subset of Python minor versions by publishing
+multiple sdist. 
 
-In the other hand, you _have_ to publish N source-dist, including potential
-future version of Python. Is the version of Python post 3.9 be 3.10 or 4 ?
+On the other hand, you _have_ to publish N source-dist for you package. And,
+this includes potential future version of Python which requires making tough,
+unknowable decisions. Is the version of Python post 3.9 be 3.10 or 4 ?
 
-Also PyPI does not allow you to upload multiple sdist. So this one is out
-anyway !
+META: ^^ could someone please explain this better; why not just not release an
+sdist for that version until it is actually released? why is this a problem?
+
+Also, PyPI does not allow you to upload multiple sdist. So this solution won't
+work if you want to be in the cheeseshop anyway!
+
+META: ^^ Does this apply to both legacy and warehouse?
 
 Example: (??? Ask Donald)
-
 
 The new way
 ~~~~~~~~~~~
 
 It's easier now!
 
-If you use setuptools > 24.2, you can set the `python_requires` metadata in you
-`setup.py`. With the recent changes to PyPI/warehouse and when your users are
-using PIP 9.0+ it will only install compatible version of your software.
+If you use setuptools > 24.2, you can set the `python_requires` metadata in
+your `setup.py`. Recent changes to PyPI/warehouse returns `python_requires`
+metadata in response to API calls. Pip 9.0+ knows how to make and interpret
+those API calls. This means that if you use setuptools 24.2+ and set
+`python_requires` metadata, and your users are using pip 9.0+, then it will
+only install versions of your software that are explicitly compatible with
+their system, even if your newest release is Python 3 only!
 
-You don't need to change name, you don't need to jump through hoops.
-It's minimally a single line change to your source.
+This avoids most of the downsides of other solutions: You don't need to change
+package names. You don't need to create a new package. You don't need to
+release wheels only. Most importantly, you don't need to abandon your users,
+and you don't need to jump through hoops to avoid doing so.  It can be as
+simple as a single line change to your source.
 
-Though it won't work for your users not on pip 9.0+, and sometime if they don't
-have setuptools 24.2.
+There are downsides, but they are of a different type. For example, it won't
+work for your users who haven't upgrade to pip 9.0+. Sometime it may not work
+if they don't have setuptools 24.2+.
 
-There will always be cases where one of the above requirements will not be true
-on some users' machines, particularly if they do not upgrade their pip.  But,
-this is why it is even more important to encourage Python 2 users to upgrade
-their pip version to 9.0+.
+META: ^^ why does it only sometimes not work if they don't have setuptools
+24.2, is it if they build from source? Or why else would this be a problem?
+
+This is why it is all the more important to encourage Python 2 users (in
+particular) to upgrade their pip version to 9.0+.
+
+
+META: vv This sounds out of tone for everything else. We don't need to hand
+wring, this seems like a general point that we should make before listing
+things as it doesn't specifically apply to the new solution
 
 Regardless of the failures it is _critical_ to provide users with the right
 error messages and _solutions_ to the problems that arise. Providing _early_
@@ -294,21 +315,20 @@ inevitable compatibility related bug reports.
 -------------------------------------------------------
 
 While Pep 5xx describes a mechanism by which a package can be tagged as Python
-3 only, this currently does not work for a variety of reasons. Indeed, for a
-Python 3 only package to be installed, 2 critical pieces of software need to
-understand this metadata:
-
+3 only, this did not work as of mid-2016 for a variety of reasons. For a Python
+3 only package to be not installed because of `requires_python` metadata, 2
+critical pieces of packaging software need to _understand_ this metadata:
 
 A) The package manger
 
 For a package to install only on compatible python versions, the package
-manager needs to access the compatibility information. Excepting some
-previously mentioned "pseudo-features", pip <9.0 cannot understand the
-`requires_python` metadata. It is _preferable_ for the Package manager to get
-this information _before_ downloading or (trying to) install packages. It is
-useful to understand how pip gets this information from the package repository
-and how pip makes its decision. Any team with internal deployments will need
-this understanding to diagnose the origin of the errors not-up-to-date users
+manager needs to access and apply compatibility information. Pip <9.0 does not
+understand the `requires_python` metadata. If it did, it is still _preferable_
+for the Package manager to get this information _before_ downloading or trying
+to install packages. It is useful to understand how pip gets this information
+from the package repository and how pip decides what to install. For those with
+internal deployments: it is crucial that you understand these inner workings so
+you can diagnose the origin of the errors that users who are not up-to-date
 will encounter.
 
 Pip does parse what is called a `simple repository` format, lo list the
