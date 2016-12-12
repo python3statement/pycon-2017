@@ -33,13 +33,19 @@ release as Python 3 only; today it is possible.
 Like any maintainer of a widely used library, we want to ensure that users
 continue to use Python 2 continue to have functioning libraries, even after
 development proceeds in a way that does not support Python 2. One way to ensure
-that is to allow easy installation of older versions; another way is to have a
-parallel "Long Term Support" variant that a different community of developers
-supports going forward. At the same time, it is not reasonable to expect users
-to explicitly pin maximal version dependencies in all of their projects and
-track those that they depend on (including those that they were not actively
-developing), when all they wish is to avoid having a Python 2 incompatibility
-issue.
+that is to allow easy installation of older versions, and that also requires
+not inappropriately overwriting those installations. Another approach is to
+have a parallel "Long Term Support" variant supported by a different community
+of developers going forward. But, users should not need to manually pin maximal
+version dependencies across their development environments and in all of their
+projects if all they want is to use libraries in Python 2. Even if we did
+expect that of users, consider what would happen when a package they rely on
+relies on a package that converts to Python 3. If they were not tracking the
+complete dependency tree, they might upgrade their packages and discover that
+their projects no longer work. To avert this they would need to monkey patch
+the requirements of the packages they depend on to pin those at the last
+version compatible with Python 2. Such a situation is untenable. Users that
+want to use Python 2 should not have to go through so much anguish to do so. 
 
 In order to solve this problem, and thereby make both users' and maintainers'
 lives easier, we ventured into the rabbit-hole called Packaging.
@@ -51,10 +57,9 @@ efforts in building the ramparts of the pypa/Warehouse Castle, battles with the
 dragons of Pip, and errands in the "land of no unit tests" otherwise known as
 PyPI legacy.
 
-By the end of the above tale, the careful beholder will be aware of the
-hazards of migrating their libraries to require Python 3, and of strategies for
-overcoming these issues.
-
+By the end of the above tale, the audience members will know the road to Python
+3 only libraries had once had hazards that are now easily avoidable. So long as
+users upgrade their package management tools. 
 
 Description
 ===========
