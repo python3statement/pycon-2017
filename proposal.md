@@ -117,17 +117,18 @@ Objective
 
  - Make users and developers aware of the [Python 3
    statement](http://www.python3statement.org/) as a resource to inform users
-   and developers that some packages are migrating to require Python 3, and how
-   to do it without breaking users' systems.
+   and developers that scientific computing libraries are going to require Python
+   3, but that they are trying to do it without breaking users' systems.
 
- - Make users and community leaders aware that they should be using pip 9+ and
-   setuptools 24.3+ to avoid problems in their Python 2 installation.
+ - Make users and community leaders aware of the urgency of encouraging the use
+   of pip 9+ and setuptools 24.3+, specifically if they wish to avoid problems
+   in their Python 2 installations.
 
  - Make developers aware of the recent changes in Python Packaging
    (`python_requres` metadata) and how to make use of it.
 
- - The traps to avoid if you plan to release a Python 3 only version of your
-   package.
+ - Inform developers of the traps facing the release of a Python 3 only version of your
+   package and give tools to avoid those traps.
 
 
 Detailed Abstract
