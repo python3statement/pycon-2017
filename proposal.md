@@ -32,20 +32,34 @@ release as Python 3 only; today it is possible.
 
 Like any maintainer of a widely used library, we want to ensure that users
 continue to use Python 2 continue to have functioning libraries, even after
-development proceeds in a way that does not support Python 2. One way to ensure
-that is to allow easy installation of older versions, and that also requires
-not inappropriately overwriting those installations. Another approach is to
-have a parallel "Long Term Support" variant supported by a different community
-of developers going forward. But, users should not need to manually pin maximal
-version dependencies across their development environments and in all of their
-projects if all they want is to use libraries in Python 2. Even if we did
-expect that of users, consider what would happen when a package they rely on
-relies on a package that converts to Python 3. If they were not tracking the
-complete dependency tree, they might upgrade their packages and discover that
-their projects no longer work. To avert this they would need to monkey patch
-the requirements of the packages they depend on to pin those at the last
-version compatible with Python 2. Such a situation is untenable. Users that
-want to use Python 2 should not have to go through so much anguish to do so. 
+development proceeds in a way that does not support Python 2. This can be
+addressed by a couple of approaches. 
+
+One approach is to have a parallel "Long Term Support" variant supported by a
+different community of developers going forward. This allows the main library
+developers to follow their Python 3 only plan, without breaking anything for
+Python 2 users, as those users are effectively no longer using the original
+package. Especially for those required to use Python 2 because of their
+workplace requirements, those workplaces may be able to fund the development of
+that "Long Term Support" variant. We do not focus on this route as it is not
+sure-proof, since it is unclear whether such a LTS version of the library will
+ever exist.  
+
+The more sure-proof approach is to ensure that is to allow easy installation of older versions.
+But, that additionally requires not inappropriately overwriting older installed
+versions when users upgrade, which is a much more foul, cruel and bad-tempered
+of a rodent than it at first appears. Even so, users should not need to
+manually pin maximal version dependencies across their development environments
+and in all of their projects if all they want is to use libraries in Python 2.
+Even if we did expect that of users, consider what would happen when a package
+they rely on relies on a package that converts to Python 3. If they were not
+tracking the complete dependency tree, they might upgrade their packages and
+discover that their projects no longer work. To avert this they would need to
+monkey patch the requirements of the packages they depend on to pin those at
+the last version compatible with Python 2. Such a situation is untenable. Users
+that want to use Python 2 should not have to go through so much anguish to do
+so. 
+
 
 In order to solve this problem, and thereby make both users' and maintainers'
 lives easier, we ventured into the rabbit-hole called Packaging.
@@ -82,9 +96,9 @@ unsuspecting Python 2 users.
 Audience
 ========
 
-Library authors, in particular library authors interested in releasing a
-version of their library that requires Python 3 without breaking Python 2 users'
-systems.
+Library authors. In particular, library authors who are interested in releasing a
+version of their library that requires Python 3 but do not wish to break users
+systems who continue to use Python 2.
 
 Users and developers of Python 2 libraries, who want to make sure their systems
 don't upgrade to incompatible versions of once-compatible packages.
