@@ -45,20 +45,20 @@ that "Long Term Support" variant. We do not focus on this route as it is not
 sure-proof, since it is unclear whether such a LTS version of the library will
 ever exist.  
 
-The more sure-proof approach is to ensure that is to allow easy installation of older versions.
-But, that additionally requires not inappropriately overwriting older installed
-versions when users upgrade, which is a much more foul, cruel and bad-tempered
-of a rodent than it at first appears. Even so, users should not need to
+The more sure-proof approach is to ensure that is to allow easy installation of
+older versions.  But, that requires not inappropriately overwriting those older
+installed versions when users upgrade, which is a much more "foul, cruel and
+bad-tempered rodent" than it at first appears. Users should not need to
 manually pin maximal version dependencies across their development environments
-and in all of their projects if all they want is to use libraries in Python 2.
-Even if we did expect that of users, consider what would happen when a package
-they rely on relies on a package that converts to Python 3. If they were not
-tracking the complete dependency tree, they might upgrade their packages and
-discover that their projects no longer work. To avert this they would need to
-monkey patch the requirements of the packages they depend on to pin those at
-the last version compatible with Python 2. Such a situation is untenable. Users
-that want to use Python 2 should not have to go through so much anguish to do
-so. 
+and projects if all they want is to use the latest versions of libraries that
+are compatible with Python 2. Even if we did expect that of users, consider
+what would happen when a package they rely on relies on a package that converts
+to be only Python 3 compatible. If they were not tracking the complete
+dependency tree, they might upgrade their packages and discover that their
+projects no longer work. To avert this they would need to monkey patch the
+requirements of the packages they depend on to pin those at the last version
+compatible with Python 2. Such a situation is untenable. Users that want to use
+Python 2 should not have to go through so much anguish to do so. 
 
 
 In order to solve this problem, and thereby make both users' and maintainers'
