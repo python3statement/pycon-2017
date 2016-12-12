@@ -162,42 +162,50 @@ harmony.
 2. The gotchas and old solutions
 --------------------------------
 
-We'll dive into various solutions that were available as of mid
-2016 if you wished to release a Python 3 only package. While it is possible to tag wheels as
-being Python 3 only, a Python 2 installation with pip `<9.0` will consider the
-latest `.tar.gz` of a package as the "most recent version". It will treat it as
-compatible with Python 2, thereby breaking users' systems after they upgrade
-(without any warning being given). Worse, if even one  dependency upgrades in
-this manner, that will still be enough to break users' systems.
+We'll dive into the various solutions that were available as of mid-2016 for
+releasing a Python 3 only package. 
 
-Several workarounds are possible. This includes (META: we should give examples
-for each)
+
+Even then, you could tag wheels as being Python 3 only, but that approach will
+break if you also release a `.tar.gz`. Pip `<9.0` considers the latest
+`.tar.gz` of a package as the "most recent version", regardless of which Python
+version is invoking pip. Then, the new, "once-compatible"  version will be seen
+as _still_ compatible with Python 2, thereby breaking users' systems when they
+upgrade (and will give no warning about what is happening).  Worse, if even one
+dependency upgrades in this manner, that will still be enough to break users'
+systems.
+
+Several workarounds were possible then. This includes (META: we should give
+examples for each)
 
 Do Nothing
 ~~~~~~~~~~
 
-Do nothing. Just release your new package that uses Python 3 only feature.
+Do nothing. Just release your new package that uses some Python 3 only
+available on.
 
 It's super easy. You just need to release.
 
-The drawbacks is that some users (dependees' maintainers) will chase you to the
-end of the world with a chainsaw because you broke their system. You likely
-don't want that.
+But this approach is not without drawbacks: some users and dependees'
+maintainers will chase you to the end of the world with a chainsaw because you
+broke their systems. You likely don't want that.
 
 Example: Nikolas
 
 Change your package name
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Of course instead of releasing a new version you can decide to make a full new
-package with a new name.
+Instead of releasing a new version, you can release a "new" package with a new
+name, that just happens to contain the same functionality as your
+"once-compatible" package.
 
+In this case, it's obvious for users which packages are to be used with which
+Python systems.
 
-Then it's obvious from the package name on which system your users are working.
-
-Though it needs all user to become _aware_ of the new name, and migrate to it
-_explicitely_. It will also invalidate most of the user habits and already
-available documentation available online.
+The downside to this is that, all users need to know that the new name exists,
+and explicitly migrate to it explicitly everywhere on which they relied on the
+previous library. In this action, you invalidate many users' habits, their
+code, and much of the documentation that already exists online.
 
 Example: ???
 
